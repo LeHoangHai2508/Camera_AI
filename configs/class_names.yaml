@@ -1,0 +1,14 @@
+# ============================================================
+# Class Name Mappings
+# ============================================================
+
+# Person detection model classes
+detection:
+  0: person
+
+# ROI state classification model classes
+classification:
+  0: empty
+  1: normal
+  2: full
+  3: overload

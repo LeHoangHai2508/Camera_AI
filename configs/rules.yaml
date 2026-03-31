@@ -1,0 +1,17 @@
+# ============================================================
+# Rule Engine Configuration
+# ============================================================
+
+camera_id: cam01
+
+# Rule 1 — Worker absence alert
+worker_absence:
+  threshold_sec: 15          # seconds without person → alert
+  grace_frames: 3            # allow brief disappearance (frames)
+
+# Rule 2 — Backlog / inventory pile-up alert
+backlog_alert:
+  threshold_sec: 20          # seconds in trigger state → alert
+  trigger_states:
+    - full
+    - overload

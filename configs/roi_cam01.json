@@ -1,0 +1,16 @@
+{
+  "camera_id": "cam01",
+  "video_path": "assets/videos/video1.mp4",
+  "worker_rois": [
+    {
+      "id": "worker_01",
+      "points": [[100, 200], [300, 200], [300, 500], [100, 500]]
+    }
+  ],
+  "buffer_rois": [
+    {
+      "id": "buffer_01",
+      "points": [[420, 230], [650, 230], [650, 470], [420, 470]]
+    }
+  ]
+}

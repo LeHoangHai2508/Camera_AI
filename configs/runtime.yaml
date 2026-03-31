@@ -1,0 +1,26 @@
+# ============================================================
+# Runtime / Inference Configuration
+# ============================================================
+
+# Frame processing
+process_fps: 5                # frames per second to process
+imgsz_detect: 640             # input size for person detector
+imgsz_classify: 224           # input size for ROI classifier
+
+# Model confidence
+confidence_detect: 0.45       # minimum confidence for person detection
+confidence_classify: 0.40     # minimum confidence for ROI classification
+
+# Smoothing
+smoothing_window: 10          # number of recent predictions for majority vote
+
+# Tracker
+tracker: bytetrack.yaml       # tracker config (bytetrack.yaml or botsort.yaml)
+
+# Default model paths (override via CLI)
+person_model: models/person/best_person.pt
+roi_cls_model: models/roi_state/best_roi_cls.pt
+
+# Output
+output_dir: outputs
+snapshot_on_alert: true
