@@ -1,0 +1,9 @@
+empty: gần như không có hàng
+normal: có hàng nhưng vẫn ở mức bình thường
+full: hàng nhiều, gần đầy
+overload: hàng quá nhiều, dồn ứ rõ
+
+Nguyên tắc
+Chỉ nhìn vào vùng buffer đã crop
+Không quan tâm người trong crop
+Không đổi tiêu chuẩn giữa chừng

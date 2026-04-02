@@ -54,6 +54,11 @@ Yêu cầu: Python 3.10+, PyTorch với CUDA (GPU NVIDIA).
 
 ---
 Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass 
+
+
+.\.venv_labelimg\Scripts\Activate.ps1      
+
+
 ## Quy trình sử dụng
 
 ### 1. Trích frame từ video

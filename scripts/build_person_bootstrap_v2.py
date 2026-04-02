@@ -8,7 +8,7 @@ random.seed(42)
 sources = [
     ("ds1", Path("datasets/person_sources/ds1")),
     ("ds2", Path("datasets/person_sources/ds2")),
-    ("v2m", Path("datasets/person_video_v2_manual")),
+    ("v2h", Path("datasets/person_video_v2_hard")),
 ]
 
 out_root = Path("datasets/person_bootstrap_v2")
