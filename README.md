@@ -53,7 +53,7 @@ Yêu cầu: Python 3.10+, PyTorch với CUDA (GPU NVIDIA).
 > **Lưu ý:** Nếu không có GPU, hệ thống sẽ tự động fallback về CPU nhưng tốc độ sẽ chậm hơn đáng kể.
 
 ---
-
+Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass 
 ## Quy trình sử dụng
 
 ### 1. Trích frame từ video
