@@ -3,6 +3,7 @@ __pycache__/
 *.pyo
 *.pyd
 
+.venv_labelimg/
 .venv/
 venv/
 env/
