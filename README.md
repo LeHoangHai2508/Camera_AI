@@ -184,3 +184,25 @@ Khi trạng thái buffer ROI ở `full/overload` liên tục > `T_backlog` giây
 4. **Product counting** — detect + track sản phẩm trong khay
 5. **Tối ưu** — export TensorRT (GPU) để tăng tốc inference
 6. **Multi-GPU** — hỗ trợ chạy trên nhiều GPU
+
+
+
+python src\infer_demo.py --video assets\videos\cam01_video1.mp4 --roi configs\roi_cam01.json --rules configs\rules.yaml --runtime configs\runtime.yaml --person_model models\person\best_person.pt --roi_cls_model models\roi_state\best_roi_cls.pt --output outputs\videos\cam01_demo.mp4 --device 0 --preview
+
+
+
+Chạy demo trên file output thẳng, không quay màn hình
+
+Hiện video demo bạn gửi là video quay màn hình, không phải output sạch.
+
+Bây giờ cần chạy lại để lấy file output trực tiếp từ pipeline:
+
+python src\infer_demo.py --video assets\videos\cam01_video1.mp4 --roi configs\roi_cam01.json --rules configs\rules.yaml --runtime configs\runtime.yaml --person_model models\person\best_person.pt --roi_cls_model models\roi_state\best_roi_cls.pt --output outputs\videos\cam01_demo_clean.mp4 --device 0
+
+Sau đó kiểm tra:
+
+outputs\videos\cam01_demo_clean.mp4
+outputs\logs\*_events.csv
+outputs\snapshots\*
+
+Đây mới là bộ đầu ra đúng để đánh giá kỹ.
