@@ -1,0 +1,17 @@
+notify:
+  enabled: true
+  provider: console      # console | webhook | zalo_oa | none
+
+  webhook:
+    url: ""
+    timeout_sec: 10
+
+  zalo:
+    access_token: ""
+    recipient_uid: ""
+    send_api_url: ""
+    timeout_sec: 15
+
+  send_on:
+    - worker_absence_start
+    - backlog_alert_start

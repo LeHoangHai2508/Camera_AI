@@ -206,3 +206,5 @@ outputs\logs\*_events.csv
 outputs\snapshots\*
 
 Đây mới là bộ đầu ra đúng để đánh giá kỹ.
+
+python src\infer_demo.py --video dummy --roi configs\roi_cam01.json --rules configs\rules.yaml --runtime configs\runtime.yaml --notify configs\notify.yaml --person_model models\person\best_person.pt --roi_cls_model models\roi_state\best_roi_cls.pt --output outputs\videos\cam01_rtsp_demo.mp4 --device 0

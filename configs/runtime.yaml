@@ -2,6 +2,13 @@
 # Runtime / Inference Configuration
 # ============================================================
 
+input:
+  source_type: rtsp
+  video_path: assets/videos/cam01_video1.mp4
+  rtsp_url: ""
+  reconnect_sec: 2
+  process_every_n_frames: 3
+
 # Frame processing
 process_fps: 5                # frames per second to process
 imgsz_detect: 640             # input size for person detector

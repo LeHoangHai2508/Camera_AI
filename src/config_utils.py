@@ -101,3 +101,11 @@ def load_all_configs(roi_path: str, rules_path: str,
     if runtime_path:
         result["runtime"] = load_runtime(runtime_path)
     return result
+
+# -- Loader notify ----------------------------------------------
+def load_notify(yaml_path: str):
+    path = Path(yaml_path)
+    if not path.exists():
+        raise FileNotFoundError(f"Notify config not found: {yaml_path}")
+    with open(path, "r", encoding="utf-8") as f:
+        return yaml.safe_load(f)
