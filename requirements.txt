@@ -10,3 +10,5 @@ pillow==11.3.0
 psutil==7.2.2
 polars==1.36.1
 requests
+fastapi
+uvicorn

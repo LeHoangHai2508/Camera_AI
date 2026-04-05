@@ -1,0 +1,14 @@
+zbs:
+  mode: "mock"          # mock | real
+
+  # Chua dung o mock mode
+  access_token: ""
+  send_api_url: ""
+  timeout_sec: 15
+
+  # Chon 1 trong 2 khi sang real
+  recipient_phone: ""
+  recipient_uid: ""
+
+  # Template ZBS da duyet
+  template_id: ""

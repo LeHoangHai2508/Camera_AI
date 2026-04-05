@@ -1,0 +1,7 @@
+zalo:
+  access_token: "DIEN_OA_ACCESS_TOKEN"
+  recipient_uids:
+    - "DIEN_USER_ID_1"
+    - "DIEN_USER_ID_2"
+  send_api_url: "DIEN_ENDPOINT_GUI_TIN_OA"
+  timeout_sec: 15
