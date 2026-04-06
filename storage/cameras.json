@@ -1,0 +1,34 @@
+[
+  {
+    "camera_uid": "cam_001",
+    "display_name": "Camera 1",
+    "source_mode": "video",
+    "source_value": "C:/Users/PC/OneDrive/Desktop/CODE/AI_Camera_Ver/assets/videos/cam01_video1.mp4",
+    "roi_path": "configs/roi_cam01.json",
+    "enabled": true
+  },
+  {
+    "camera_uid": "cam_002",
+    "display_name": "Camera 2",
+    "source_mode": "video",
+    "source_value": "assets/videos/cam02_video2.mp4",
+    "roi_path": "configs/roi_cam02.json",
+    "enabled": true
+  },
+  {
+    "camera_uid": "cam_003",
+    "display_name": "Camera 3",
+    "source_mode": "video",
+    "source_value": "assets/videos/cam03_video3.mp4",
+    "roi_path": "configs/roi_cam03.json",
+    "enabled": true
+  },
+  {
+    "camera_uid": "cam_004",
+    "display_name": "Camera 4",
+    "source_mode": "none",
+    "source_value": "",
+    "roi_path": "configs/roi_cam04.json",
+    "enabled": true
+  }
+]

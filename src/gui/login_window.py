@@ -19,6 +19,9 @@ class LoginWindow:
         self.var_username = tk.StringVar(value="admin")
         self.var_password = tk.StringVar(value="123456")
 
+        self.dashboard_toplevel = None
+        self.dashboard_screen = None
+
         self._build_ui()
 
     def _build_ui(self) -> None:
@@ -63,9 +66,43 @@ class LoginWindow:
             messagebox.showerror("Login failed", "Sai tài khoản hoặc mật khẩu")
             return
 
-        self.root.withdraw()
-        dashboard = tk.Toplevel(self.root)
-        DashboardWindow(dashboard, user=user, on_logout=self._on_logout)
+        # Không tạo dashboard trực tiếp trong callback để tránh treo UI
+        self.root.after(10, lambda: self._open_dashboard(user))
+
+    def _open_dashboard(self, user: dict) -> None:
+        try:
+            dashboard = tk.Toplevel(self.root)
+            self.dashboard_toplevel = dashboard
+
+            self.dashboard_screen = DashboardWindow(
+                dashboard,
+                user=user,
+                on_logout=self._on_logout,
+            )
+
+            # Chỉ ẩn login sau khi dashboard tạo xong
+            self.root.withdraw()
+
+            dashboard.deiconify()
+            dashboard.lift()
+            dashboard.focus_force()
+
+        except Exception as e:
+            try:
+                if self.dashboard_toplevel is not None:
+                    self.dashboard_toplevel.destroy()
+            except Exception:
+                pass
+
+            self.dashboard_toplevel = None
+            self.dashboard_screen = None
+            self.root.deiconify()
+
+            messagebox.showerror("Dashboard error", str(e))
 
     def _on_logout(self) -> None:
+        self.dashboard_toplevel = None
+        self.dashboard_screen = None
         self.root.deiconify()
+        self.root.lift()
+        self.root.focus_force()

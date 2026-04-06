@@ -128,8 +128,17 @@ class AICameraPipeline:
         self.device_name = "CPU"
         self.device_runtime = "cpu"
 
-    def setup(self, video_path: str = "") -> None:
-        self._load_configs(video_path=video_path)
+    def setup(
+        self,
+        video_path: str = "",
+        source_mode: Optional[str] = None,
+        source_value: str = "",
+    ) -> None:
+        self._load_configs(
+            video_path=video_path,
+            source_mode=source_mode,
+            source_value=source_value,
+        )
         self._resolve_device()
         self._load_models()
         self._open_source()
@@ -140,7 +149,12 @@ class AICameraPipeline:
         self.started_at = time.time()
         self.stopped = False
 
-    def _load_configs(self, video_path: str = "") -> None:
+    def _load_configs(
+        self,
+        video_path: str = "",
+        source_mode: Optional[str] = None,
+        source_value: str = "",
+    ) -> None:
         self.roi_cfg = load_roi_config(self.roi_path)
         self.rules_cfg = load_rules(self.rules_path)
         self.runtime_cfg = (
@@ -180,9 +194,24 @@ class AICameraPipeline:
             self.conf_cls = self.runtime_cfg.get("confidence_classify", self.conf_cls)
             self.smooth_window = self.runtime_cfg.get("smoothing_window", self.smooth_window)
             self.tracker_cfg = self.runtime_cfg.get("tracker", self.tracker_cfg)
-            self.snapshot_on_alert = self.runtime_cfg.get("snapshot_on_alert", self.snapshot_on_alert)
+            self.snapshot_on_alert = self.runtime_cfg.get(
+                "snapshot_on_alert",
+                self.snapshot_on_alert,
+            )
         else:
             self.video_path = video_path
+
+        if source_mode:
+            normalized_mode = source_mode.strip().lower()
+            if normalized_mode in {"video", "video_file"}:
+                self.source_type = "video_file"
+                self.video_path = source_value.strip()
+            elif normalized_mode == "rtsp":
+                self.source_type = "rtsp"
+                self.rtsp_url = source_value.strip()
+            elif normalized_mode == "none":
+                self.source_type = "video_file"
+                self.video_path = ""
 
         if self.notify_path and os.path.exists(self.notify_path):
             self.notify_cfg = load_notify(self.notify_path).get("notify", {})
@@ -249,8 +278,13 @@ class AICameraPipeline:
         self.frame_h = 0
 
         if self.source_type == "video_file":
-            self.cap, self.video_fps, self.total_frames, self.frame_w, self.frame_h = \
-                self._open_video_file_source(self.video_path)
+            (
+                self.cap,
+                self.video_fps,
+                self.total_frames,
+                self.frame_w,
+                self.frame_h,
+            ) = self._open_video_file_source(self.video_path)
             self.video_name = Path(self.video_path).stem
             self.active_source_type = "video_file"
             self.active_source_desc = self.video_path
@@ -259,8 +293,13 @@ class AICameraPipeline:
             rtsp_url = (self.rtsp_url or "").strip()
 
             if not rtsp_url:
-                self.cap, self.video_fps, self.total_frames, self.frame_w, self.frame_h = \
-                    self._open_video_file_source(self.video_path)
+                (
+                    self.cap,
+                    self.video_fps,
+                    self.total_frames,
+                    self.frame_w,
+                    self.frame_h,
+                ) = self._open_video_file_source(self.video_path)
                 self.video_name = Path(self.video_path).stem
                 self.active_source_type = "video_file"
                 self.active_source_desc = self.video_path
@@ -273,8 +312,13 @@ class AICameraPipeline:
                     except Exception:
                         pass
 
-                    self.cap, self.video_fps, self.total_frames, self.frame_w, self.frame_h = \
-                        self._open_video_file_source(self.video_path)
+                    (
+                        self.cap,
+                        self.video_fps,
+                        self.total_frames,
+                        self.frame_w,
+                        self.frame_h,
+                    ) = self._open_video_file_source(self.video_path)
                     self.video_name = Path(self.video_path).stem
                     self.active_source_type = "video_file"
                     self.active_source_desc = self.video_path
@@ -285,7 +329,10 @@ class AICameraPipeline:
                     self.frame_h = int(temp_cap.get(cv2.CAP_PROP_FRAME_HEIGHT))
                     temp_cap.release()
 
-                    self.frame_stream = read_rtsp_loop(rtsp_url, reconnect_sec=self.reconnect_sec)
+                    self.frame_stream = read_rtsp_loop(
+                        rtsp_url,
+                        reconnect_sec=self.reconnect_sec,
+                    )
                     self.video_name = f"{self.camera_id}_rtsp"
                     self.active_source_type = "rtsp"
                     self.active_source_desc = rtsp_url
@@ -363,35 +410,38 @@ class AICameraPipeline:
         if event_type not in self.send_on:
             return
 
-        if self.provider == "console":
-            notify_console(notify_event)
-            return
+        try:
+            if self.provider == "console":
+                notify_console(notify_event)
+                return
 
-        if self.provider == "webhook":
-            webhook_cfg = self.notify_cfg.get("webhook", {})
-            url = webhook_cfg.get("url", "").strip()
-            if url:
-                notify_webhook(
-                    notify_event,
-                    url=url,
-                    timeout_sec=webhook_cfg.get("timeout_sec", 10),
-                )
-            return
+            if self.provider == "webhook":
+                webhook_cfg = self.notify_cfg.get("webhook", {})
+                url = webhook_cfg.get("url", "").strip()
+                if url:
+                    notify_webhook(
+                        notify_event,
+                        url=url,
+                        timeout_sec=webhook_cfg.get("timeout_sec", 10),
+                    )
+                return
 
-        if self.provider == "zalo_oa":
-            zalo_cfg = self.notify_cfg.get("zalo", {})
-            access_token = zalo_cfg.get("access_token", "").strip()
-            recipient_uid = zalo_cfg.get("recipient_uid", "").strip()
-            send_api_url = zalo_cfg.get("send_api_url", "").strip()
+            if self.provider == "zalo_oa":
+                zalo_cfg = self.notify_cfg.get("zalo", {})
+                access_token = zalo_cfg.get("access_token", "").strip()
+                recipient_uid = zalo_cfg.get("recipient_uid", "").strip()
+                send_api_url = zalo_cfg.get("send_api_url", "").strip()
 
-            if access_token and recipient_uid and send_api_url:
-                notify_zalo_oa(
-                    notify_event,
-                    access_token=access_token,
-                    recipient_uid=recipient_uid,
-                    send_api_url=send_api_url,
-                    timeout_sec=zalo_cfg.get("timeout_sec", 15),
-                )
+                if access_token and recipient_uid and send_api_url:
+                    notify_zalo_oa(
+                        notify_event,
+                        access_token=access_token,
+                        recipient_uid=recipient_uid,
+                        send_api_url=send_api_url,
+                        timeout_sec=zalo_cfg.get("timeout_sec", 15),
+                    )
+        except Exception as e:
+            print("[WARN] notify failed:", e)
 
     def _ensure_writer(self, display: np.ndarray) -> None:
         if not self.save_output:
