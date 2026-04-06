@@ -1,5 +1,12 @@
-from src.gui.main_window import launch_app
+import tkinter as tk
+from src.gui.login_window import LoginWindow
+
+
+def main() -> None:
+    root = tk.Tk()
+    LoginWindow(root)
+    root.mainloop()
 
 
 if __name__ == "__main__":
-    launch_app()
+    main()

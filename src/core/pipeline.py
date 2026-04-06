@@ -484,7 +484,7 @@ class AICameraPipeline:
             )
 
             if event:
-                emitted = self._build_worker_event(event, frame, wid, current_sec)
+                emitted = self._build_worker_event(event, display, wid, current_sec)
                 emitted_events.append(emitted)
                 self._dispatch_notify(emitted)
 
@@ -520,7 +520,7 @@ class AICameraPipeline:
 
             event = self.buffer_rules[bid].update(stable_state, current_sec)
             if event:
-                emitted = self._build_backlog_event(event, frame, bid, current_sec, stable_state)
+                emitted = self._build_backlog_event(event, display, bid, current_sec, stable_state)
                 emitted_events.append(emitted)
                 self._dispatch_notify(emitted)
 
@@ -577,8 +577,24 @@ class AICameraPipeline:
         if event["action"] == "start":
             event_type = "worker_absence_start"
             trigger_state = "absent"
+
+            snap_frame = frame.copy()
+            target_points = None
+            for wroi in self.worker_rois:
+                if wroi["id"] == wid:
+                    target_points = wroi["points"]
+                    break
+
+            if target_points is not None:
+                draw_polygon(
+                    snap_frame,
+                    target_points,
+                    color=(0, 0, 255),
+                    label=f"{wid} ALERT",
+                )
+
             snap_path = self._save_snapshot(
-                frame,
+                snap_frame,
                 f"{self.video_name}_{wid}_absence_{current_sec:.0f}s.jpg",
             )
         else:
@@ -620,8 +636,24 @@ class AICameraPipeline:
         if event["action"] == "start":
             event_type = "backlog_alert_start"
             trigger_state = event.get("trigger_state", stable_state)
+
+            snap_frame = frame.copy()
+            target_points = None
+            for broi in self.buffer_rois:
+                if broi["id"] == bid:
+                    target_points = broi["points"]
+                    break
+
+            if target_points is not None:
+                draw_polygon(
+                    snap_frame,
+                    target_points,
+                    color=(0, 0, 255),
+                    label=f"{bid} ALERT",
+                )
+
             snap_path = self._save_snapshot(
-                frame,
+                snap_frame,
                 f"{self.video_name}_{bid}_backlog_{current_sec:.0f}s.jpg",
             )
         else:

@@ -1,0 +1,6 @@
+event_id,camera_id,roi_id,event_type,start_time_sec,end_time_sec,duration_sec,trigger_state,snapshot_path,video_name
+1,cam02,worker_01,worker_absence_start,0.0,15.09,15.09,absent,outputs\snapshots\cam02_video2\cam02_video2_worker_01_absence_15s.jpg,cam02_video2
+2,cam02,worker_02,worker_absence_start,0.0,15.09,15.09,absent,outputs\snapshots\cam02_video2\cam02_video2_worker_02_absence_15s.jpg,cam02_video2
+3,cam02,worker_03,worker_absence_start,0.0,15.09,15.09,absent,outputs\snapshots\cam02_video2\cam02_video2_worker_03_absence_15s.jpg,cam02_video2
+4,cam02,buffer_01,backlog_alert_start,0.0,20.04,20.04,full,outputs\snapshots\cam02_video2\cam02_video2_buffer_01_backlog_20s.jpg,cam02_video2
+5,cam02,buffer_02,backlog_alert_start,0.0,20.04,20.04,overload,outputs\snapshots\cam02_video2\cam02_video2_buffer_02_backlog_20s.jpg,cam02_video2
