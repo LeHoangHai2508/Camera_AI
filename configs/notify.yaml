@@ -1,5 +1,5 @@
 notify:
-  enabled: true
+  enabled: false
   provider: webhook   # console | webhook | zalo_oa | none
 
   webhook:

@@ -9,7 +9,7 @@ import cv2
 import numpy as np
 from typing import List, Tuple, Optional
 
-from common import (
+from src.utils.common import (
     COLOR_GREEN, COLOR_RED, COLOR_YELLOW, COLOR_CYAN,
     COLOR_WHITE, COLOR_BLACK, COLOR_ORANGE,
     STATE_COLORS, FONT_FACE, FONT_SCALE, FONT_THICK,
