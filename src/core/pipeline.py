@@ -31,6 +31,7 @@ from src.utils.draw_utils import (
     draw_timer,
 )
 from src.utils.event_logger import EventLogger
+from src.utils.path_utils import dir_output_path, file_output_path, resource_path
 
 
 class AICameraPipeline:
@@ -128,12 +129,29 @@ class AICameraPipeline:
         self.device_name = "CPU"
         self.device_runtime = "cpu"
 
+    def _normalize_paths(self) -> None:
+        self.roi_path = resource_path(self.roi_path)
+        self.rules_path = resource_path(self.rules_path)
+        self.person_model_path = resource_path(self.person_model_path)
+        self.roi_cls_model_path = resource_path(self.roi_cls_model_path)
+
+        if self.runtime_path:
+            self.runtime_path = resource_path(self.runtime_path)
+
+        if self.notify_path:
+            self.notify_path = resource_path(self.notify_path)
+
+        self.output_path = file_output_path(
+            self.output_path or "outputs/videos/demo_output.mp4"
+        )
+
     def setup(
         self,
         video_path: str = "",
         source_mode: Optional[str] = None,
         source_value: str = "",
     ) -> None:
+        self._normalize_paths()
         self._load_configs(
             video_path=video_path,
             source_mode=source_mode,
@@ -212,6 +230,9 @@ class AICameraPipeline:
             elif normalized_mode == "none":
                 self.source_type = "video_file"
                 self.video_path = ""
+
+        if self.source_type == "video_file" and self.video_path:
+            self.video_path = resource_path(self.video_path)
 
         if self.notify_path and os.path.exists(self.notify_path):
             self.notify_cfg = load_notify(self.notify_path).get("notify", {})
@@ -304,7 +325,7 @@ class AICameraPipeline:
                 self.active_source_type = "video_file"
                 self.active_source_desc = self.video_path
             else:
-                temp_cap = open_capture(rtsp_url, use_ffmpeg=True)
+                temp_cap = open_capture(rtsp_url, use_ffmpeg=False)
 
                 if not temp_cap.isOpened():
                     try:
@@ -342,12 +363,16 @@ class AICameraPipeline:
         self.skip = max(1, int(self.video_fps / self.process_fps)) if self.video_fps > 0 else 1
 
     def _setup_output_dirs(self) -> None:
-        ensure_dir(os.path.dirname(self.output_path) or "outputs/videos")
+        self.output_path = file_output_path(self.output_path)
 
-        self.snap_dir = os.path.join("outputs", "snapshots", self.video_name)
-        ensure_dir(self.snap_dir)
+        self.snap_dir = dir_output_path(
+            os.path.join("outputs", "snapshots", self.video_name)
+        )
 
-        self.log_path = os.path.join("outputs", "logs", f"{self.video_name}_events.csv")
+        self.log_path = file_output_path(
+            os.path.join("outputs", "logs", f"{self.video_name}_events.csv")
+        )
+
         self.logger = EventLogger(
             self.log_path,
             video_name=self.video_name,

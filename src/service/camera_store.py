@@ -5,10 +5,12 @@ import os
 import uuid
 from typing import Dict, List, Optional
 
+from src.utils.path_utils import resource_path, to_portable_path
+
 
 class CameraStore:
     def __init__(self, path: str = "storage/cameras.json") -> None:
-        self.path = path
+        self.path = resource_path(path)
         os.makedirs(os.path.dirname(self.path), exist_ok=True)
 
     def ensure_seed_file(self) -> None:
@@ -52,6 +54,17 @@ class CameraStore:
             },
         ]
 
+    def _sanitize_camera(self, camera: Dict) -> Dict:
+        item = dict(camera)
+
+        item["roi_path"] = to_portable_path(item.get("roi_path", ""))
+
+        mode = str(item.get("source_mode", "")).strip().lower()
+        if mode == "video":
+            item["source_value"] = to_portable_path(item.get("source_value", ""))
+
+        return item
+
     def load_all(self) -> List[Dict]:
         self.ensure_seed_file()
         with open(self.path, "r", encoding="utf-8") as f:
@@ -61,6 +74,7 @@ class CameraStore:
         return data
 
     def save_all(self, cameras: List[Dict]) -> None:
+        cameras = [self._sanitize_camera(c) for c in cameras]
         with open(self.path, "w", encoding="utf-8") as f:
             json.dump(cameras, f, ensure_ascii=False, indent=2)
 
@@ -88,6 +102,8 @@ class CameraStore:
         return None
 
     def upsert(self, camera: Dict) -> None:
+        camera = self._sanitize_camera(camera)
+
         cameras = self.load_all()
         uid = camera.get("camera_uid")
         replaced = False

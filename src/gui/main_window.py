@@ -5,7 +5,7 @@ import tkinter as tk
 from tkinter import filedialog, messagebox, ttk
 
 from src.gui.controller import GUIController
-
+from src.utils.path_utils import file_output_path, resource_path, to_portable_path
 
 class MainWindow:
     def __init__(self, root: tk.Tk) -> None:
@@ -169,7 +169,7 @@ class MainWindow:
             filetypes=[("Video files", "*.mp4 *.avi *.mov *.mkv"), ("All files", "*.*")],
         )
         if path:
-            self.var_video.set(path)
+            self.var_video.set(to_portable_path(path))
 
     def _pick_roi_json(self) -> None:
         path = filedialog.askopenfilename(
@@ -177,7 +177,7 @@ class MainWindow:
             filetypes=[("JSON files", "*.json"), ("All files", "*.*")],
         )
         if path:
-            self.var_roi.set(path)
+            self.var_roi.set(to_portable_path(path))
 
     def _pick_rules_yaml(self) -> None:
         path = filedialog.askopenfilename(
@@ -185,7 +185,7 @@ class MainWindow:
             filetypes=[("YAML files", "*.yaml *.yml"), ("All files", "*.*")],
         )
         if path:
-            self.var_rules.set(path)
+            self.var_rules.set(to_portable_path(path))
 
     def _pick_runtime_yaml(self) -> None:
         path = filedialog.askopenfilename(
@@ -193,7 +193,7 @@ class MainWindow:
             filetypes=[("YAML files", "*.yaml *.yml"), ("All files", "*.*")],
         )
         if path:
-            self.var_runtime.set(path)
+            self.var_runtime.set(to_portable_path(path))
 
     def _pick_notify_yaml(self) -> None:
         path = filedialog.askopenfilename(
@@ -201,7 +201,7 @@ class MainWindow:
             filetypes=[("YAML files", "*.yaml *.yml"), ("All files", "*.*")],
         )
         if path:
-            self.var_notify.set(path)
+            self.var_notify.set(to_portable_path(path))
 
     def _pick_person_model(self) -> None:
         path = filedialog.askopenfilename(
@@ -209,7 +209,7 @@ class MainWindow:
             filetypes=[("PyTorch model", "*.pt"), ("All files", "*.*")],
         )
         if path:
-            self.var_person_model.set(path)
+            self.var_person_model.set(to_portable_path(path))
 
     def _pick_roi_cls_model(self) -> None:
         path = filedialog.askopenfilename(
@@ -217,7 +217,7 @@ class MainWindow:
             filetypes=[("PyTorch model", "*.pt"), ("All files", "*.*")],
         )
         if path:
-            self.var_roi_cls_model.set(path)
+            self.var_roi_cls_model.set(to_portable_path(path))
 
     def _pick_output(self) -> None:
         path = filedialog.asksaveasfilename(
@@ -226,7 +226,7 @@ class MainWindow:
             filetypes=[("MP4 video", "*.mp4"), ("All files", "*.*")],
         )
         if path:
-            self.var_output.set(path)
+            self.var_output.set(to_portable_path(path))
 
     # def _set_latest_path(self, path: str) -> None:
     #     widget = self.root.focus_get()
@@ -245,27 +245,34 @@ class MainWindow:
         ]
 
         for label, path in required_paths:
-            if not path.strip():
+            path = path.strip()
+
+            if not path:
                 messagebox.showerror("Thiếu dữ liệu", f"Chua chon {label}")
                 return False
 
-            if not os.path.exists(path):
+            real_path = resource_path(path)
+            if not os.path.exists(real_path):
                 messagebox.showerror("Sai duong dan", f"Khong tim thay file: {path}")
                 return False
 
         runtime_path = self.var_runtime.get().strip()
-        if runtime_path and not os.path.exists(runtime_path):
-            messagebox.showerror("Sai duong dan", f"Khong tim thay runtime file: {runtime_path}")
-            return False
+        if runtime_path:
+            real_runtime_path = resource_path(runtime_path)
+            if not os.path.exists(real_runtime_path):
+                messagebox.showerror("Sai duong dan", f"Khong tim thay runtime file: {runtime_path}")
+                return False
 
         notify_path = self.var_notify.get().strip()
-        if notify_path and not os.path.exists(notify_path):
-            messagebox.showerror("Sai duong dan", f"Khong tim thay notify file: {notify_path}")
-            return False
+        if notify_path:
+            real_notify_path = resource_path(notify_path)
+            if not os.path.exists(real_notify_path):
+                messagebox.showerror("Sai duong dan", f"Khong tim thay notify file: {notify_path}")
+                return False
 
-        output_dir = os.path.dirname(self.var_output.get().strip())
-        if output_dir:
-            os.makedirs(output_dir, exist_ok=True)
+        output_path = self.var_output.get().strip()
+        if self.var_save_output.get() and output_path:
+            file_output_path(output_path)
 
         return True
 

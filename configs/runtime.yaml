@@ -3,23 +3,23 @@
 # ============================================================
 
 input:
-  source_type: rtsp
+  source_type: video_file
   video_path: assets/videos/cam01_video1.mp4
   rtsp_url: ""
   reconnect_sec: 2
-  process_every_n_frames: 3
+  process_every_n_frames: 1
 
 # Frame processing
 process_fps: 5                # frames per second to process
 imgsz_detect: 640             # input size for person detector
-imgsz_classify: 224           # input size for ROI classifier
+imgsz_classify: 224            # input size for ROI classifier
 
 # Model confidence
 confidence_detect: 0.45       # minimum confidence for person detection
 confidence_classify: 0.40     # minimum confidence for ROI classification
 
 # Smoothing
-smoothing_window: 10          # number of recent predictions for majority vote
+smoothing_window: 8         # number of recent predictions for majority vote
 
 # Tracker
 tracker: bytetrack.yaml       # tracker config (bytetrack.yaml or botsort.yaml)

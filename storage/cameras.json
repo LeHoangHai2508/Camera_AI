@@ -3,7 +3,7 @@
     "camera_uid": "cam_001",
     "display_name": "Camera 1",
     "source_mode": "video",
-    "source_value": "C:/Users/PC/OneDrive/Desktop/CODE/AI_Camera_Ver/assets/videos/cam01_video1.mp4",
+    "source_value": "assets/videos/cam01_video1.mp4",
     "roi_path": "configs/roi_cam01.json",
     "enabled": true
   },
@@ -29,6 +29,14 @@
     "source_mode": "none",
     "source_value": "",
     "roi_path": "configs/roi_cam04.json",
+    "enabled": true
+  },
+  {
+    "camera_uid": "cam_58e45ec9",
+    "display_name": "Camera mới",
+    "source_mode": "none",
+    "source_value": "",
+    "roi_path": "configs/roi_cam01.json",
     "enabled": true
   }
 ]

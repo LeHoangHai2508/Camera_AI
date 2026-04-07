@@ -4,10 +4,12 @@ import json
 import os
 from typing import Dict, Optional
 
+from src.utils.path_utils import resource_path
+
 
 class AuthService:
     def __init__(self, users_file: str = "storage/users.json") -> None:
-        self.users_file = users_file
+        self.users_file = resource_path(users_file)
 
     def _load_users(self) -> list[dict]:
         if not os.path.exists(self.users_file):

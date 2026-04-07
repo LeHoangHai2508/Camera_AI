@@ -7,7 +7,9 @@ import requests
 import yaml
 from fastapi import FastAPI, HTTPException
 
-ROOT = Path(__file__).resolve().parents[1]
+from src.utils.path_utils import app_base_dir
+
+ROOT = app_base_dir()
 CFG_PATH = ROOT / "configs" / "zalo_service.yaml"
 LOG_DIR = ROOT / "outputs" / "logs"
 LOG_DIR.mkdir(parents=True, exist_ok=True)
