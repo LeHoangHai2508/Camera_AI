@@ -367,7 +367,7 @@ python app.py
 
 Phần này phụ thuộc vào mã thực tế trong `app.py`. Nếu `app.py` chưa gọi GUI main loop hoặc chưa nối sang pipeline inference thì lệnh trên chỉ là entry dự kiến.
 
----
+---ư
 
 ## 7. File cấu hình cần có
 

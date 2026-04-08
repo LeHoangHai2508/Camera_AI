@@ -26,7 +26,7 @@ import numpy as np
 
 import sys
 sys.path.insert(0, os.path.dirname(__file__))
-from common import COLOR_GREEN, COLOR_YELLOW, COLOR_CYAN, COLOR_RED, ensure_dir
+from utils.common import COLOR_GREEN, COLOR_YELLOW, COLOR_CYAN, COLOR_RED, ensure_dir
 
 
 class ROISelector:

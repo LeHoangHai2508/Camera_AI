@@ -18,8 +18,8 @@ from pathlib import Path
 
 import sys
 sys.path.insert(0, os.path.dirname(__file__))
-from common import ensure_dir
-from config_utils import load_roi_config, get_roi_points
+from utils.common import ensure_dir
+from utils.config_utils import load_roi_config, get_roi_points
 
 
 def crop_polygon_region(frame: np.ndarray,
